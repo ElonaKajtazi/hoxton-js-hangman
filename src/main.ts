@@ -8,9 +8,14 @@ import "./style.css";
 // Be told when they lose the game
 
 // Q: How do you get a random word?
+function getRandomWord(): string {
+  const words = ["apple", "banana", "orange", "coconut", "strawberry", "lime", "grapefruit", "watermelon", "blueberry", "blackberry", "raspberry"];
+  const randomIndex = Math.floor(Math.random() * words.length);
+  return words[randomIndex];
+}
 
 let state = {
-  word: "Welcome",
+  word: "start",
   characters: [`e`, `d`, `f`, `g`, `z`],
   maxMistakes: 6,
 };
@@ -49,7 +54,7 @@ function checkIfUserWon(): boolean {
     return true; // user won
 
   } else {
-    return false; // user didn't win
+    return false; // user lost
   }
 }
 
@@ -58,16 +63,19 @@ function checkIfUserLost(): boolean {
   // is the user out of attempts?
   return true;
 }
+
 function render() {
   let appEl = document.querySelector("#app");
   if (appEl === null) return;
-  let mistakesSpan = document.createElement("span");
-  mistakesSpan.textContent = `Mistakes: ${getMistakes()} (${getMistakeCount()})`;
+  let mistakesH3El = document.createElement("h3");
+  mistakesH3El.className = "mistakes";
+  mistakesH3El.textContent = `Wrong guesses: ${getMistakes()} (${getMistakeCount()})`;
   
-  let correctGuessesSpan = document.createElement("span");
-  correctGuessesSpan.textContent = `Correct guesses: ${getCorrectGuesses()} (${getCorrectGuessesCount()})`;
+  let correctGuessesH3El1 = document.createElement("h3");
+  correctGuessesH3El1.className = "correctGuesses";
+  correctGuessesH3El1.textContent = `Correct guesses: ${getCorrectGuesses()} (${getCorrectGuessesCount()})`;
 
-  appEl.append(mistakesSpan, correctGuessesSpan);
+  appEl.append(mistakesH3El, correctGuessesH3El1);
 }
 render();
 window.state = state;
@@ -75,3 +83,4 @@ window.getMistakeCount = getMistakeCount;
 window.getMistakes = getMistakes;
 window.getCorrectGuesses = getCorrectGuesses;
 window.getCorrectGuessesCount = getCorrectGuessesCount;
+window.getRandomWord = getRandomWord;
