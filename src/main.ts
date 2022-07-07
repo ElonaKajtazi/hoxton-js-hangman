@@ -58,8 +58,11 @@ function render() {
   if (appEl === null) return;
   let mistakesSpan = document.createElement("span");
   mistakesSpan.textContent = `Mistakes: ${getMistakes()} (${getMistakeCount()})`;
+  
+  let correctGuessesSpan = document.createElement("span");
+  correctGuessesSpan.textContent = `Correct guesses: ${getCorrectGuesses()} (${getCorrectGuessesCount()})`;
 
-  appEl.append(mistakesSpan);
+  appEl.append(mistakesSpan, correctGuessesSpan);
 }
 render();
 window.state = state;
