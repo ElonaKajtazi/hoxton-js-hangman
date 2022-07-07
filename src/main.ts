@@ -45,7 +45,12 @@ function getCorrectGuessesCount() {
 // Q: Has the user won?
 function checkIfUserWon(): boolean {
   // are all the letters in state.word in state.guessedLetters?
-  return true;
+  if (getCorrectGuessesCount() === state.word.length) {
+    return true; // user won
+
+  } else {
+    return false; // user didn't win
+  }
 }
 
 // Q: Has the user lost?
