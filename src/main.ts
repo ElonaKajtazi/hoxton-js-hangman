@@ -6,6 +6,15 @@ import "./style.css";
 // See which characters they got wrong
 // Be told when they guessed the word
 // Be told when they lose the game
+type State = {
+  word: string;
+  characters: string[];
+}
+let state: State = {
+  word: "start",
+  characters: [`e`, `d`, `f`, `g`, `z`],
+};
+const MAX_MISTAKES = 6;
 
 // Q: How do you get a random word?
 function getRandomWord(): string {
@@ -14,16 +23,11 @@ function getRandomWord(): string {
   return words[randomIndex];
 }
 
-let state = {
-  word: "start",
-  characters: [`e`, `d`, `f`, `g`, `z`],
-  maxMistakes: 6,
-};
 //Q: What's the word we're guseeing? state.word✅
 
 //Q: What letters has the user guessed? state.characters✅
 
-//Q: How many attempts do they have? state.maxMistakes ✅
+//Q: How many attempts do they have? MAX_MISTAKES✅
 //Note: Don't allow the user to enter the same letters more than once
 
 //Q:How many mistakes has the user made so far? ✅
