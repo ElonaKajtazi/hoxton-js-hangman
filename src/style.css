@@ -40,3 +40,8 @@
   background-color: black;
   color: white;
 }
+.streak {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}

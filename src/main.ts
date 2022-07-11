@@ -10,6 +10,7 @@ type State = {
   word: string;
   characters: string[];
   maxMistakes: number;
+  streak: number;
 };
 
 const WORDS = [
@@ -64,6 +65,7 @@ let state: State = {
   word: getRandomWord(),
   characters: [],
   maxMistakes: 5,
+  streak: 0,
 };
 
 //Q: What's the word we're guseeing? state.word✅
@@ -177,6 +179,7 @@ function renderLosingMessage() {
   restartButton.className = "restart-button";
   restartButton.textContent = "RESTART";
   restartButton.addEventListener("click", function () {
+    state.streak = 0;
     restartGame();
   });
 
@@ -192,11 +195,18 @@ function renderWinningMessage() {
   restartButton.className = "restart-button";
   restartButton.textContent = "RESTART";
   restartButton.addEventListener("click", function () {
+    state.streak++
     restartGame();
   });
 
   wonMessageDiv.append(wonMessageP, restartButton);
   return wonMessageDiv;
+}
+function renderStreak() {
+  let streakDiv = document.createElement("div");
+  streakDiv.className = "streak";
+  streakDiv.textContent = `Streak: ${state.streak}`;
+  return streakDiv;
 }
 function render() {
   let appEl = document.querySelector("#app");
@@ -205,7 +215,8 @@ function render() {
 
   let wordDiv = renderWord();
   let mistakesDivEl = renderMistakes();
-  appEl.append(wordDiv, mistakesDivEl);
+  let streakDiv = renderStreak();
+  appEl.append(wordDiv, mistakesDivEl, streakDiv);
 
   if (checkIfUserLost()) {
     let lostMessageDiv = renderLosingMessage();
