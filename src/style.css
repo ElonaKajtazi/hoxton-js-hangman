@@ -18,10 +18,19 @@
   font-size: 1.5rem;
 }
 .mistakes {
-  color: #e74c3c;
-}
-.correctGuesses {
   color: #27ae60;
+}
+.mistakes-warning{
+  color:#e1db38
+}
+.more-mistakes-warning {
+  color: #ddb91d
+}
+.mistakes-danger{
+  color: rgba(255, 106, 0, 0.879);
+}
+.almost-lost{
+  color: rgb(255, 38, 0);
 }
 .word {
   display: grid;

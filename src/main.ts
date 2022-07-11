@@ -167,7 +167,24 @@ function renderWord() {
 function renderMistakes() {
   let mistakesDivEl = document.createElement("div");
   mistakesDivEl.className = "mistakes";
-  mistakesDivEl.textContent = `Wrong guesses: ${getMistakes()} (${getMistakeCount()})`;
+  mistakesDivEl.textContent = `Wrong guesses: ${getMistakes()} (${getMistakeCount()})
+  `;
+  if (getMistakeCount()===state.maxMistakes - 4) {
+    mistakesDivEl.className = "mistakes-warning";
+  }
+  if (getMistakeCount()===state.maxMistakes - 3) {
+    mistakesDivEl.className = "more-mistakes-warning";
+  }
+  if (getMistakeCount()===state.maxMistakes - 2) {
+    mistakesDivEl.className = "mistakes-danger";
+  }
+  if (getMistakeCount()===state.maxMistakes - 1) {
+    mistakesDivEl.className = "almost-lost";
+  }
+  if (getMistakeCount()===state.maxMistakes) {
+    mistakesDivEl.className = "lost";
+  }
+
   return mistakesDivEl;
 }
 function renderLosingMessage() {
