@@ -189,6 +189,7 @@ function renderMistakes() {
 }
 function renderLosingMessage() {
   let lostMessageDiv = document.createElement("div");
+  lostMessageDiv.className = "message";
   let lostMessageP = document.createElement("p");
   lostMessageP.textContent = `You lose! ☹️ The word was ${state.word}`;
 
@@ -205,6 +206,7 @@ function renderLosingMessage() {
 }
 function renderWinningMessage() {
   let wonMessageDiv = document.createElement("div");
+  wonMessageDiv.className = "message";
   let wonMessageP = document.createElement("p");
   wonMessageP.textContent = "You win! 🎉";
 

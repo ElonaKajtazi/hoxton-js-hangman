@@ -44,6 +44,8 @@
   border: 1px solid black;
   border-radius: 5px;
   padding: 0.5rem 1rem;
+  margin-top: 15px;
+
 }
 .restart-button:hover {
   background-color: black;
@@ -54,3 +56,4 @@
   top: 15px;
   left: 15px;
 }
+
