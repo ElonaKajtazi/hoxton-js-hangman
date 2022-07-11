@@ -11,31 +11,60 @@ type State = {
   characters: string[];
   maxMistakes: number;
 };
-let state: State = {
-  word: "start",
-  characters: [],
-  maxMistakes: 3,
-};
-// const MAX_MISTAKES = 6;
+
+const WORDS = [
+  "javascript",
+  "typescript",
+  "react",
+  "chair",
+  "table",
+  "pen",
+  "book",
+  "mouse",
+  "keyboard",
+  "monitor",
+  "laptop",
+  "cellphone",
+  "headphones",
+  "camera",
+  "speaker",
+  "microphone",
+  "apple",
+  "microsoft",
+  "google",
+  "amazon",
+  "facebook",
+  "potato",
+  "tomato",
+  "banana",
+  "orange",
+  "pear",
+  "grape",
+  "strawberry",
+  "call",
+  "text",
+  "email",
+  "sms",
+  "message",
+  "map",
+  "navigation",
+  "location",
+  "address",
+  "place",
+  "placeholder",
+  "search",
+];
 
 // Q: How do you get a random word?
-// function getRandomWord(): string {
-//   const words = [
-//     "apple",
-//     "banana",
-//     "orange",
-//     "coconut",
-//     "strawberry",
-//     "lime",
-//     "grapefruit",
-//     "watermelon",
-//     "blueberry",
-//     "blackberry",
-//     "raspberry",
-//   ];
-//   const randomIndex = Math.floor(Math.random() * words.length);
-//   return words[randomIndex];
-// }
+function getRandomWord() {
+  let randomIndex = Math.floor(Math.random() * WORDS.length);
+  return WORDS[randomIndex];
+}
+let state: State = {
+  word: getRandomWord(),
+  characters: [],
+  maxMistakes: 5,
+};
 
 //Q: What's the word we're guseeing? state.word✅
 
@@ -45,28 +74,30 @@ let state: State = {
 //Note: Don't allow the user to enter the same letters more than once
 
 //Q:How many mistakes has the user made so far? ✅
-//Count the letters in state.guessedLetters that ARE NOT in state.word
 function getMistakes() {
   let mistakes = state.characters.filter((char) => !state.word.includes(char));
   return mistakes;
 }
 
+//Count the letters in state.guessedLetters that ARE NOT in state.word ✅
 function getMistakeCount() {
   let mistakes = getMistakes();
   return mistakes.length;
 }
-// Q: How many correct guesses has the user made so far?
-// Count the letters in state.guessedLetters that ARE in state.word
+
+// Q: How many correct guesses has the user made so far? ✅
 function getCorrectGuesses() {
   let correctGuesses = state.characters.filter((char) =>
     state.word.includes(char)
   );
   return correctGuesses;
 }
+// Count the letters in state.guessedLetters that ARE in state.word ✅
 function getCorrectGuessesCount() {
   let correctGuesses = getCorrectGuesses();
   return correctGuesses.length;
 }
+
 // Q: Has the user won? ✅
 function checkIfUserWon() {
   // are all the letters in state.word in state.characters?
@@ -85,6 +116,13 @@ function checkIfUserWon() {
 function checkIfUserLost() {
   return getMistakeCount() >= state.maxMistakes;
 }
+
+function restartGame() {
+  state.word = getRandomWord();
+  state.characters = [];
+  render();
+}
+
 function listenToUserKeyPresses() {
   document.addEventListener("keyup", function (event) {
     let guess = event.key.toLowerCase();
@@ -105,25 +143,79 @@ function listenToUserKeyPresses() {
     render();
   });
 }
+
+function renderWord() {
+  let wordDiv = document.createElement("div");
+  wordDiv.className = "word";
+
+  let correctGuesses = getCorrectGuesses();
+  for (let char of state.word) {
+    let charEl = document.createElement("span");
+    charEl.className = "char";
+    if (correctGuesses.includes(char)) {
+      charEl.textContent = char;
+    } else {
+      charEl.textContent = "_";
+    }
+    wordDiv.append(charEl);
+  }
+  return wordDiv;
+}
+
+function renderMistakes() {
+  let mistakesDivEl = document.createElement("div");
+  mistakesDivEl.className = "mistakes";
+  mistakesDivEl.textContent = `Wrong guesses: ${getMistakes()} (${getMistakeCount()})`;
+  return mistakesDivEl;
+}
+function renderLosingMessage() {
+  let lostMessageDiv = document.createElement("div");
+  let lostMessageP = document.createElement("p");
+  lostMessageP.textContent = `You lose! ☹️ The word was ${state.word}`;
+
+  let restartButton = document.createElement("button");
+  restartButton.className = "restart-button";
+  restartButton.textContent = "RESTART";
+  restartButton.addEventListener("click", function () {
+    restartGame();
+  });
+
+  lostMessageDiv.append(lostMessageP, restartButton);
+  return lostMessageDiv;
+}
+function renderWinningMessage() {
+  let wonMessageDiv = document.createElement("div");
+  let wonMessageP = document.createElement("p");
+  wonMessageP.textContent = "You win! 🎉";
+
+  let restartButton = document.createElement("button");
+  restartButton.className = "restart-button";
+  restartButton.textContent = "RESTART";
+  restartButton.addEventListener("click", function () {
+    restartGame();
+  });
+
+  wonMessageDiv.append(wonMessageP, restartButton);
+  return wonMessageDiv;
+}
 function render() {
   let appEl = document.querySelector("#app");
   if (appEl === null) return;
   appEl.textContent = "";
 
-  let wordDiv = document.createElement("div");
-  wordDiv.textContent = state.word;
-  let mistakesDivEl = document.createElement("div");
-  mistakesDivEl.className = "mistakes";
-  mistakesDivEl.textContent = `Wrong guesses: ${getMistakes()} (${getMistakeCount()})`;
+  let wordDiv = renderWord();
+  let mistakesDivEl = renderMistakes();
+  appEl.append(wordDiv, mistakesDivEl);
 
-  let correctGuessesDivEl = document.createElement("div");
-  correctGuessesDivEl.className = "correctGuesses";
-  correctGuessesDivEl.textContent = `Correct guesses: ${getCorrectGuesses()} (${getCorrectGuessesCount()})`;
-
-  appEl.append(wordDiv, mistakesDivEl, correctGuessesDivEl);
+  if (checkIfUserLost()) {
+    let lostMessageDiv = renderLosingMessage();
+    appEl.append(lostMessageDiv);
+  }
+  if (checkIfUserWon()) {
+    let wonMessageDiv = renderWinningMessage();
+    appEl.append(wonMessageDiv);
+  }
 }
 
 listenToUserKeyPresses();
 render();
-window.state = state;
-window.checkifUserLost = checkIfUserLost;
